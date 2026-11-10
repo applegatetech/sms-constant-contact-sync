@@ -1,0 +1,5 @@
+# Customer data stays in Google Drive, never in git
+data/
+*.csv
+*.xlsx
+.DS_Store
