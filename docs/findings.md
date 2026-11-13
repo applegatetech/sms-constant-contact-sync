@@ -21,6 +21,7 @@ About **3,666** customers opted in (always yes + no-then-yes + account opt-in) b
   - Account opt-in: 1,103 of 1,894 created before the account, 752 less than 10 minutes before.
 - The rest were created **after** the order and still have no permission (always yes 427, account opt-in 791), so the opt-in isn't read for them at all.
 - Started around Aug-Sep 2025 (about 1,330 contacts added Sep 9-14, 2025), new cases every day since; 20-120 opted-in customers a month, 226 in March 2026. The Oct 24, 2026 reconnect did not fix it.
+- Nov 13 check: a new customer added Nov 12 shows Subscribed, so new opt-ins may now get the right permission. One example so far; confirm with more before assuming it's fixed. Existing No Permissions Set contacts are not fixed.
 
 ### Examples
 - Guest checkouts, single order, opted in, No Permissions Set: Noel Christensen #349494 (Nov 9), Rachel Orman #349522 (Nov 9).
@@ -32,6 +33,8 @@ Not a nonce failure (an earlier guess, corrected in the Nov 10 email). Last 200 
 
 ## 3. New customers stripped from all lists
 Each nightly sync leaves some Subscribed WooCommerce customers on no list. 33 re-listed Nov 8, 15 more Nov 9. Four were stripped twice (re-added Nov 1 and again Nov 8): Eileen Cimermancic, Meishel Montanye, Jeremy Burton, Daniel Ross.
+
+Still happening after the Nov 6 sync move: new customers added Nov 12 are Subscribed but on no list (seen Nov 13).
 
 ## 4. Bounce-report actions miss re-created contacts
 Delete / Add to list from a campaign's bounce report acts on the contact record as of send day. If the sync deleted and re-created the contact, the action hits the dead record. Nov 8: Delete & Unsubscribe of 147 non-existent bounces changed ~2. Working method: export the bounce report, import (email column only) into a temp list, then Delete & Unsubscribe from that list.
