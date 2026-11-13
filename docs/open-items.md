@@ -15,6 +15,6 @@ Background: Drive "HANDOFF-hpos-2026-11-13.md". HPOS is authoritative and compat
 - [ ] Delete ~/Downloads/sms-account-optin-yes-no-cc-permissions-2026-11-10.csv on Johnny's computer (Drive copy is the kept one).
 - [ ] Delete the empty CC list "Non-existent bounces Oct 26 UNSUBSCRIBE" (list only).
 - [ ] Find out why boss@strictlymedicinalseeds.com bounces as non-existent.
-- [ ] Before each send, check CC's "contacts aren't in any list" banner and re-list stripped customers to WooCommerce - All Customers.
+- [ ] Before each send, check CC's "contacts aren't in any list" banner and add stripped customers to General Interest (not a WooCommerce list: the nightly sync clears and refills those, so they'd be stripped again). See the unlisted-customers item above.
 - [ ] Consider a CAPTCHA (e.g. Turnstile) on the homepage form if bot signups grow.
 - [ ] Optional: a site-side fix so the opt-in is also written to the order when an account is created (only if CC confirms the sync reads order meta only).
