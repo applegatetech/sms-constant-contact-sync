@@ -32,8 +32,55 @@ All 41 customers who opted in at checkout Nov 11-13 were looked up in CC: 26 Sub
 
 Note: a CC view filtered to "Subscribed + not in any list" can't show No-permission contacts, and "No permission set + not in any list" misses those the sync put on lists. Check opted-in customers by email instead.
 
-### HPOS
-HPOS has been authoritative with compatibility mode off since Feb 3, 2026 (Drive "HANDOFF-hpos-2026-11-13.md"). Not the cause (problem began Aug-Sep 2025) but possibly an aggravator; checks in open-items.md.
+### HPOS (checked Nov 13, 2026: not the cause, and it did not make it worse)
+HPOS has been authoritative with compatibility mode off since Feb 3, 2026 (Drive "HANDOFF-hpos-2026-11-13.md").
+
+**Plugin code (live, v2.4.3, read-only).** The plugin declares HPOS compatibility (`plugin.php:40-41`,
+`FeaturesUtil::declare_compatibility( 'custom_order_tables', ..., true )`). It only *saves* the opt-in:
+- order: `View/Checkout/NewsletterPreferenceCheckbox.php:167` `$order->update_meta_data()` on
+  `woocommerce_checkout_create_order` (HPOS-safe); block checkout `Utility/CheckoutBlockNewsletter.php:132` same.
+- user: `NewsletterPreferenceCheckbox.php:146` and `CheckoutBlockNewsletter.php:141` `update_user_meta()` on
+  `woocommerce_checkout_update_user_meta` / `woocommerce_created_customer`.
+- Its only reads are `get_user_meta()` to pre-tick the box (`NewsletterPreferenceCheckbox.php:110`,
+  `CheckoutBlockNewsletter.php:178`). No `get_post_meta()` on orders, no `WP_Query`/`$wpdb` on `shop_order`.
+- Abandoned checkouts use the plugin's own table and REST route; `clear_purchased_data` uses `$order->update_meta_data()`.
+
+The order opt-in reaches CC because **CC's servers pull it through the WooCommerce REST API** with the plugin's key
+(woocommerce_api_keys id 1015 "Constant Contact - API (2026-10-24 18:00:14)", read_write, last access Nov 13 2:54 PM).
+Test as that key's user (`rest_do_request`, read-only): `/wc/v3/orders/1066251` (Nov 13, after the switch) and
+`/wc/v3/orders/1034806` (Jan 31) both return `cc_woo_customer_agrees_to_marketing = true` in `meta_data`, although
+neither has a post-meta copy; `/wc/v3/customers/107003` returns the account opt-in `true`. So HPOS hides nothing from CC.
+
+**Before/after rate.** Customers whose latest marketing choice was yes (paid orders, order meta; or account opt-in
+user meta when the orders carry no choice), by month of that yes, vs those of them "No Permissions Set" in the Nov 10
+export (Drive "sms-optedin-no-permissions-set-2026-11-10.csv"; matched by hashed email, 3,364 of 3,666):
+
+| Month | Opted in | No permission | Rate |
+|---|---|---|---|
+| 2025-06 | 460 | 3 | 0.7% |
+| 2025-07 | 373 | 3 | 0.8% |
+| 2025-08 | 454 | 68 | 15.0% |
+| 2025-09 | 398 | 176 | 44.2% |
+| 2025-10 | 336 | 124 | 36.9% |
+| 2025-11 | 331 | 124 | 37.5% |
+| 2025-12 | 421 | 167 | 39.7% |
+| 2026-01 | 1,021 | 244 | 23.9% |
+| 2026-02 (switch Feb 3) | 1,005 | 288 | 28.7% |
+| 2026-03 | 1,394 | 507 | 36.4% |
+| 2026-04 | 1,124 | 353 | 31.4% |
+| 2026-05 | 952 | 373 | 39.2% |
+| 2026-06 | 633 | 251 | 39.7% |
+| 2026-07 | 536 | 194 | 36.2% |
+| 2026-08 | 463 | 135 | 29.2% |
+| 2026-09 | 425 | 116 | 27.3% |
+| 2026-10 | 549 | 139 | 25.3% |
+| 2026-11 (to Nov 10) | 246 | 39 | 15.9% |
+
+Aug 2025-Jan 2026: 903/2,961 = 30.5%; Mar-Oct 2026: 2,068/6,076 = 34.0%. The step change is **Aug-Sep 2025**
+(<1% to 44%), five months before HPOS; after Feb 3 the rate stays in the same 25-40% band. March's high count
+(507) follows its high volume, not a higher rate. Nov is low because recent contacts were still settling at export
+time (the Nov 11-13 lookup found 22%). The 302 unmatched are customers whose latest choice by this definition isn't
+yes or whose email differs between the export and the order; they don't change the picture.
 
 ## 2. "No marketing choice saved" on ~17% of orders
 Not a nonce failure (an earlier guess, corrected in the Nov 10 email). Last 200 checkout orders (Nov 9-10): 33 had no opt-in on the order; all 33 created an account at that checkout and all 33 had the choice on user meta (20 yes, 13 no). No guest or existing-account order was missing it.
