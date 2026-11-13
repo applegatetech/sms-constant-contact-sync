@@ -32,7 +32,8 @@ About **3,666** customers opted in (always yes + no-then-yes + account opt-in) b
 - `wp wc hpos status`: HPOS enabled, compatibility mode (sync to posts table) **off**, 281,992 unsynced orders. The posts table no longer mirrors orders.
 - Order id 1053572 (always-yes example, May 31, 2026): `wc_orders_meta` has `cc_woo_customer_agrees_to_marketing = true` and a checkout uuid; `wp post meta get` returns nothing.
 - So the opt-in exists only in the HPOS tables. If the sync reads it with post meta functions, it sees no opt-in. Not proven: new customers added Nov 12 arrive Subscribed with compatibility mode still off, and account opt-ins (user meta) aren't affected by HPOS.
-- HPOS switch date still unknown (placeholder rows keep the original order dates).
+- HPOS tables `wp_wc_orders` / `wp_wc_orders_meta` CREATE_TIME: 2026-07-14. No order data left in postmeta (`_billing_email` gone), so the posts copy was cleaned up. If HPOS really started July 2026, it can't explain a problem that began Aug-Sep 2025. CREATE_TIME also resets on a database import or table rebuild, so cross-check against other tables' create times.
+- `wp wc shop_order get` (order 339754, id 1053572) shows the opt-in `true` through WooCommerce's own order API, so anything reading orders through WooCommerce sees it.
 
 ## 2. "No marketing choice saved" on ~17% of orders
 Not a nonce failure (an earlier guess, corrected in the Nov 10 email). Last 200 checkout orders (Nov 9-10): 33 had no opt-in on the order; all 33 created an account at that checkout and all 33 had the choice on user meta (20 yes, 13 no). No guest or existing-account order was missing it.
