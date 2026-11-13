@@ -1,6 +1,7 @@
 # Open items
 
 - [ ] Wait for the CC developers' answer (see case-log.md questions).
+- [ ] Screenshare with John Tran (Nov 13 voicemail) to give compliance more examples so they can approve switching opted-in customers to Subscribed. Confirm the change covers ONLY the opted-in groups (always yes, no-then-yes, account opt-in; ~3,666), and ask what stops new cases (it still happens daily).
 - [ ] If CC won't fix permissions: bulk-switch ONLY opted-in customers (always yes, no-then-yes, account opt-in) to Subscribed after Johnny approves. Never the abandoned-cart contacts with no order, never yes-then-no or always-no.
 - [ ] WPForms logging is ON (WPForms > Tools > Logs, turned on Nov 10). After a few real homepage signups, check Providers/Errors, confirm whether existing contacts reach General Interest, then turn logging off.
 - [ ] Delete the test contact johnnydragonhearts+smstest@gmail.com in CC.
