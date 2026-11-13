@@ -19,6 +19,7 @@ Case: John Tran, Tier 2 Technical Support (support2@constantcontact.com, direct 
 2. Does the sync read the opt-in from the customer's account (user meta), or only from the order?
 3. Can CC fix permission for the opted-in customers, or should we update them ourselves? (Nov 13: compliance likely yes, pending more examples. Scope must be the ~3,666 opted-in only, not all 16,558.)
 4. Why do new opted-in customers end up on no list? (Still happening Nov 12, now with the correct Subscribed permission.)
+4b. Does the sync read the order opt-in through the WooCommerce order API (HPOS-aware) or post meta? HPOS is on with compatibility mode off; the opt-in is only in wc_orders_meta.
 4a. Was something changed around Nov 10-12? New customers now arrive Subscribed.
 5. Do bounce-report actions follow the current contact record?
 6. Who deleted three lists on Nov 9 at 12:21 PM EST (not Johnny)?

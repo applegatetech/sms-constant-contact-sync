@@ -9,6 +9,7 @@
 - [ ] Delete the empty CC list "Non-existent bounces Oct 26 UNSUBSCRIBE" (list only).
 - [ ] Find out why boss@strictlymedicinalseeds.com bounces as non-existent.
 - [ ] Check a few more customers added Nov 11-13: if all are Subscribed, the permission fix is only needed for the existing 3,666 (Drive: sms-optedin-no-permissions-set-2026-11-10.csv).
+- [ ] Find the date HPOS was switched on and compare with the Aug-Sep 2025 start. Do not turn on HPOS compatibility mode without a plan (it would sync ~282k orders).
 - [ ] Before each send, check CC's "contacts aren't in any list" banner and re-list stripped customers to WooCommerce - All Customers.
 - [ ] Consider a CAPTCHA (e.g. Turnstile) on the homepage form if bot signups grow.
 - [ ] Optional: a site-side fix so the opt-in is also written to the order when an account is created (only if CC confirms the sync reads order meta only).
