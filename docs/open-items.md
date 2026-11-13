@@ -1,5 +1,12 @@
 # Open items
 
+## HPOS checks (needs a session with SSH/WP-CLI on the live server; read-only)
+Background: Drive "HANDOFF-hpos-2026-11-13.md". HPOS is authoritative and compatibility mode has been OFF since Feb 3, 2026, 4:06-4:25 PM PT; orders after that exist only in `wp_wc_orders*` (`wp_posts` has empty `shop_order_placehold` rows). The CC "No permission set" problem started Aug-Sep 2025, before HPOS, so HPOS didn't cause it, but it may have made it worse (226 affected in March 2026, the month after).
+
+- [ ] **Plugin code check.** In `wp-content/plugins/constant-contact-woocommerce/` (v2.4.3), find every read of `cc_woo_customer_agrees_to_marketing` and of order data the sync sends to CC. Record for each: file:line, and whether it uses HPOS-safe calls (`$order->get_meta()`, `wc_get_order()`, `wc_get_orders()`) or post-based calls (`get_post_meta($order_id, ...)`, `WP_Query` on `shop_order`, `$wpdb` on `wp_posts`/`wp_postmeta`). A post-based read returns nothing for every order since Feb 3, 2026. Also note how the user-meta opt-in (account created at checkout) is read, if at all. Do not edit the plugin; write the findings to docs/findings.md.
+  - Starting point: `grep -rn "cc_woo_customer_agrees_to_marketing\|get_post_meta\|shop_order\|postmeta" wp-content/plugins/constant-contact-woocommerce/`
+- [ ] **Before/after Feb 3, 2026 rate.** For checkout orders with `cc_woo_customer_agrees_to_marketing = true` (order meta, plus user meta for accounts created at checkout), compare the share whose CC contact is "No Permissions Set" for orders placed Aug 2025-Feb 3, 2026 vs Feb 3, 2026-now, by month. Use the Nov 10 CC export (Drive) or a fresh export; CC data stays out of git. A jump after Feb 3 = HPOS made it worse.
+
 - [ ] Wait for the CC developers' answer (see case-log.md questions).
 - [ ] If CC won't fix permissions: bulk-switch ONLY opted-in customers (always yes, no-then-yes, account opt-in) to Subscribed after Johnny approves. Never the abandoned-cart contacts with no order, never yes-then-no or always-no.
 - [ ] WPForms logging is ON (WPForms > Tools > Logs, turned on Nov 10). After a few real homepage signups, check Providers/Errors, confirm whether existing contacts reach General Interest, then turn logging off.
