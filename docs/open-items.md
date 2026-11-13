@@ -9,7 +9,7 @@ Background: Drive "HANDOFF-hpos-2026-11-13.md". HPOS is authoritative and compat
 
 - [ ] Wait for the CC developers' answer (see case-log.md questions).
 - [ ] CC will fix "No Permissions Set" (Nov 13 call). Confirm with John which contacts they'll switch: only opted-in customers (always yes, no-then-yes, account opt-in; ~3,611 with a paid order, plus new cases since Nov 10). Not abandoned-cart contacts with no order, not yes-then-no or always-no. Ask for a date, then spot-check a sample afterwards. Johnny no longer bulk-switches these himself.
-- [ ] Unlisted Subscribed customers (John's Nov 13 suggestion): add them to a list that is not a WooCommerce list (e.g. General Interest, which campaigns already target) so the nightly sync can't strip them. Needs Johnny's OK before doing it in CC. Currently 48 WooCommerce contacts (Nov 13), all account-created checkouts. Repeat after each nightly sync until CC fixes the cause.
+- [ ] Unlisted Subscribed customers (John's Nov 13 suggestion): add them to a list that is not a WooCommerce list (e.g. General Interest, which campaigns already target) so the nightly sync can't strip them. Needs Johnny's OK before doing it in CC. Nov 13: Johnny moved that day's unlisted Subscribed contacts to General Interest. Repeat after each nightly sync (check the "not in any list" banner) until CC fixes the cause.
 - [ ] WPForms logging is ON (WPForms > Tools > Logs, turned on Nov 10). After a few real homepage signups, check Providers/Errors, confirm whether existing contacts reach General Interest, then turn logging off.
 - [ ] Delete the test contact johnnydragonhearts+smstest@gmail.com in CC.
 - [ ] Delete ~/Downloads/sms-account-optin-yes-no-cc-permissions-2026-11-10.csv on Johnny's computer (Drive copy is the kept one).
