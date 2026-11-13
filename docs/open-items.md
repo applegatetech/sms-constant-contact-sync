@@ -17,4 +17,4 @@ Background: Drive "HANDOFF-hpos-2026-11-13.md". HPOS is authoritative and compat
 - [ ] Find out why boss@strictlymedicinalseeds.com bounces as non-existent.
 - [ ] Before each send, check CC's "contacts aren't in any list" banner and add stripped customers to General Interest (not a WooCommerce list: the nightly sync clears and refills those, so they'd be stripped again). See the unlisted-customers item above.
 - [ ] Consider a CAPTCHA (e.g. Turnstile) on the homepage form if bot signups grow.
-- [ ] Optional: a site-side fix so the opt-in is also written to the order when an account is created (only if CC confirms the sync reads order meta only).
+- [ ] Optional: a site-side fix so the opt-in is also written to the order when an account is created (only if CC confirms the sync reads order meta only). Cause found Nov 13 (findings.md 2): the plugin's nonce fails for the order save after WooCommerce logs the new account in. A small snippet could copy the user-meta value onto the order at checkout (not the plugin itself). Tell CC developers the cause; they may fix it in the plugin.

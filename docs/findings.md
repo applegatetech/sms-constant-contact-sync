@@ -83,7 +83,37 @@ time (the Nov 11-13 lookup found 22%). The 302 unmatched are customers whose lat
 yes or whose email differs between the export and the order; they don't change the picture.
 
 ## 2. "No marketing choice saved" on ~17% of orders
-Not a nonce failure (an earlier guess, corrected in the Nov 10 email). Last 200 checkout orders (Nov 9-10): 33 had no opt-in on the order; all 33 created an account at that checkout and all 33 had the choice on user meta (20 yes, 13 no). No guest or existing-account order was missing it.
+Not a general nonce failure (an earlier guess, corrected in the Nov 10 email); it is a nonce check that fails only for the order save after the new account logs in (see "Cause" below). Last 200 checkout orders (Nov 9-10): 33 had no opt-in on the order; all 33 created an account at that checkout and all 33 had the choice on user meta (20 yes, 13 no). No guest or existing-account order was missing it.
+
+### Cause in the plugin code (traced Nov 13, 2026; plugin v2.4.3 in `plugin/`, WooCommerce core `WC_Checkout`)
+The classic-checkout box (`src/View/Checkout/NewsletterPreferenceCheckbox.php`) saves the choice only when its own
+nonce verifies (`get_submitted_customer_preference()` :177 -> `Utility/NonceVerification.php:42` `wp_verify_nonce`).
+A WordPress nonce is tied to the user it was made for. The checkout page is rendered for a logged-out shopper
+(user 0), and WooCommerce logs the new account in part-way through the same request:
+
+1. `WC_Checkout::process_checkout()` calls `process_customer()`, then `create_order()`.
+2. `process_customer()` -> `wc_create_new_customer()` fires `woocommerce_created_customer` while the shopper is still
+   user 0. Nonce valid -> `save_user_preference()` writes **user meta** (:146).
+3. `wc_set_customer_auth_cookie()` -> `wp_set_current_user( <new id> )`. From here the nonce no longer verifies.
+4. `woocommerce_checkout_update_user_meta` -> `save_user_preference()`: nonce fails, returns '' -> nothing written
+   (the user meta from step 2 stays).
+5. `create_order()` -> `woocommerce_checkout_create_order` -> `save_user_preference_to_order()` (:160): nonce fails,
+   returns '' -> **nothing on the order**.
+
+Guest: user 0 throughout, nonce valid, saved on the order (no user to save to). Logged-in account: same user
+throughout, saved on both. The plugin's nonce action doesn't start with "woocommerce", so WooCommerce's session-based
+nonce user for guests doesn't apply. Block checkout (`Utility/CheckoutBlockNewsletter.php:132`) has no nonce and writes
+both order and user, so the missing order meta also confirms the site uses the classic checkout.
+
+The plugin never sends contacts to CC (no outbound calls except a wordpress.org version check). CC pulls orders,
+customers and abandoned checkouts through the WooCommerce REST API and its own `wc/cc-woo/abandoned-checkouts`
+route. The account opt-in is reachable at `/wc/v3/customers/<id>` (Nov 13 test), so an account-created order reaching
+CC with no choice means CC's sync takes the opt-in from the order only. That is inferred from the code plus our data;
+CC hasn't confirmed it (case-log question 2).
+
+This explains the account-created checkouts only. Guests and repeat customers with `true` on the order who still end
+up No Permissions Set (e.g. #349494, #349741) are a separate, CC-side problem (the existing abandoned-cart contact
+isn't upgraded; finding 1).
 
 ## 3. New customers stripped from all lists
 Each nightly sync leaves some Subscribed WooCommerce customers on no list. 33 re-listed Nov 8, 15 more Nov 9. Four were stripped twice (re-added Nov 1 and again Nov 8): Eileen Cimermancic, Meishel Montanye, Jeremy Burton, Daniel Ross; on Nov 13 they were on no list a third time.

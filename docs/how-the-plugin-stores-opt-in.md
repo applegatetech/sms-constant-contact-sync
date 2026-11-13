@@ -10,6 +10,10 @@ Plugin: Constant Contact + WooCommerce v2.4.3. Meta key: `cc_woo_customer_agrees
 
 Every order also gets `cc_woo_checkout_uuid`.
 
+Why the account case has nothing on the order: the box's nonce was made for the logged-out shopper; WooCommerce logs
+the new account in before it creates the order, so the order save fails the nonce check and is skipped. Details in
+findings.md 2, "Cause in the plugin code".
+
 Neither value is visible in wp-admin: the order screen and the Edit User screen don't show it. Use the REST API (scripts/browser), WP-CLI, or SQL:
 
 ```
