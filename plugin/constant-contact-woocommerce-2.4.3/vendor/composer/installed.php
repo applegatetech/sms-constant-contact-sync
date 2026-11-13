@@ -1,0 +1,41 @@
+<?php return array(
+    'root' => array(
+        'name' => 'webdevstudios/constant-contact-woocommerce',
+        'pretty_version' => '1.0.0+no-version-set',
+        'version' => '1.0.0.0',
+        'reference' => null,
+        'type' => 'wordpress-plugin',
+        'install_path' => __DIR__ . '/../../',
+        'aliases' => array(),
+        'dev' => false,
+    ),
+    'versions' => array(
+        'composer/installers' => array(
+            'pretty_version' => 'v2.2.0',
+            'version' => '2.2.0.0',
+            'reference' => 'c29dc4b93137acb82734f672c37e029dfbd95b35',
+            'type' => 'composer-plugin',
+            'install_path' => __DIR__ . '/./installers',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'webdevstudios/constant-contact-woocommerce' => array(
+            'pretty_version' => '1.0.0+no-version-set',
+            'version' => '1.0.0.0',
+            'reference' => null,
+            'type' => 'wordpress-plugin',
+            'install_path' => __DIR__ . '/../../',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'webdevstudios/oops-wp' => array(
+            'pretty_version' => '1.0.0',
+            'version' => '1.0.0.0',
+            'reference' => '458bc9ddf32d8bbb86f19ba0c676f07a61b58798',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../webdevstudios/oops-wp',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+    ),
+);
