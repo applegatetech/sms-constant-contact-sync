@@ -1,7 +1,8 @@
 # Repro steps for CC: opt-in not saved on the order when an account is created at checkout
 
-Written Nov 13, 2026 from the plugin and WooCommerce code (findings.md 2, "Cause in the plugin code"). Not yet run on a
-test store. Safe to send to CC: no customer data. Real example if wanted: #349018 / user 106859.
+Written Nov 13, 2026 from the plugin and WooCommerce code (findings.md 2, "Cause in the plugin code"). Reproduced on
+our staging site Nov 13, 2026 (findings.md 2, "Reproduced on staging"): new-account order empty, user `true`; guest and
+logged-in controls `true` on the order. Safe to send to CC: no customer data. Real example if wanted: #349018 / user 106859.
 
 ---
 
@@ -9,7 +10,7 @@ test store. Safe to send to CC: no customer data. Real example if wanted: #34901
 
 **Setup**
 - WooCommerce with the classic (shortcode) checkout, not the checkout block.
-- Constant Contact + WooCommerce 2.4.3, connected.
+- Constant Contact + WooCommerce 2.4.3, active. It doesn't need to be connected: our staging run was not connected.
 - WooCommerce > Settings > Accounts & Privacy: allow guest checkout, and allow customers to create an account during checkout.
 - Any test payment method, e.g. Cash on delivery.
 
@@ -40,3 +41,6 @@ check fails, and nothing is written to the order.
 
 **Effect on our store:** about 17% of checkout orders have no opt-in on the order, and every one of them created an
 account at checkout. These customers end up "No Permissions Set" or on no list after the nightly sync.
+
+**Tested:** we reproduced this on our staging site (classic checkout, plugin 2.4.3): the new-account order had no
+value and the new user had `true`, while guest and logged-in orders had `true` on the order.

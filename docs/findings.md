@@ -85,7 +85,7 @@ yes or whose email differs between the export and the order; they don't change t
 ## 2. "No marketing choice saved" on ~17% of orders
 Not a general nonce failure (an earlier guess, corrected in the Nov 10 email); it is a nonce check that fails only for the order save after the new account logs in (see "Cause" below). Last 200 checkout orders (Nov 9-10): 33 had no opt-in on the order; all 33 created an account at that checkout and all 33 had the choice on user meta (20 yes, 13 no). No guest or existing-account order was missing it.
 
-### Cause in the plugin code (traced Nov 13, 2026; plugin v2.4.3 in `plugin/`, WooCommerce core `WC_Checkout`)
+### Cause in the plugin code (traced Nov 13, 2026, reproduced on staging the same day; plugin v2.4.3 in `plugin/`, WooCommerce core `WC_Checkout`)
 The classic-checkout box (`src/View/Checkout/NewsletterPreferenceCheckbox.php`) saves the choice only when its own
 nonce verifies (`get_submitted_customer_preference()` :177 -> `Utility/NonceVerification.php:42` `wp_verify_nonce`).
 A WordPress nonce is tied to the user it was made for. The checkout page is rendered for a logged-out shopper
@@ -114,6 +114,29 @@ CC hasn't confirmed it (case-log question 2).
 This explains the account-created checkouts only. Guests and repeat customers with `true` on the order who still end
 up No Permissions Set (e.g. #349494, #349741) are a separate, CC-side problem (the existing abandoned-cart contact
 isn't upgraded; finding 1).
+
+### Reproduced on staging (Nov 13, 2026, ~4:50 PM PT; Mac Pro website session)
+Staging only; live and CC untouched. Staging had live's CC connection copied into its database (connection options and
+WC API key 1015); with Johnny's OK those rows were deleted from the staging DB only (backed up, not via the plugin's
+Disconnect, so nothing reached CC). Then: plugin 2.4.3 active, classic shortcode checkout, account creation at checkout
+on, Cheque payment, outbound HTTP/email/webhooks blocked. Real checkouts over HTTP with real nonces; test emails
+@example.com; logged-in runs as test customer 106803.
+
+| Run | Checkout | Box | Order | User | Order value | User value | Copy marker |
+|---|---|---|---|---|---|---|---|
+| 1 bug | new account | ticked | 1065111 | 106805 | (empty) | true | - |
+| 2 control | guest | ticked | 1065112 | - | true | - | - |
+| 3 control | logged-in existing | ticked | 1065113 | 106803 | true | true | - |
+| 5a fix | new account | ticked | 1065114 | 106806 | true | true | yes |
+| 5b fix | new account | unticked | 1065115 | 106807 | false | false | yes |
+| 6a regression | guest | ticked | 1065116 | - | true | - | (none) |
+| 6b regression | logged-in existing | ticked | 1065117 | 106803 | true | true | (none) |
+| 6c regression | guest | unticked | 1065118 | - | false | - | (none) |
+
+Bug confirmed: a new-account checkout saves the opt-in on the user only. The fix
+(`snippets/mu-plugins/sms-cc-optin-to-order.php` v1.0.0, installed on staging only) copies the choice to the order both
+ways and leaves guest and logged-in orders to the plugin. No PHP warnings in staging debug.log. Still left on staging:
+the mu-plugin, CC plugin active, Cheque on, 8 test orders, 3 test users, test script ~/cccheckout.sh.
 
 ## 3. New customers stripped from all lists
 Each nightly sync leaves some Subscribed WooCommerce customers on no list. 33 re-listed Nov 8, 15 more Nov 9. Four were stripped twice (re-added Nov 1 and again Nov 8): Eileen Cimermancic, Meishel Montanye, Jeremy Burton, Daniel Ross; on Nov 13 they were on no list a third time.
