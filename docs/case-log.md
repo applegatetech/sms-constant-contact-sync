@@ -14,11 +14,11 @@ Case: John Tran, Tier 2 Technical Support (support2@constantcontact.com, direct 
 | Nov 13 | Voicemail from John Tran: CC compliance should be able to switch the No Permissions Set contacts to Subscribed, but wants more examples before approving. Asks for a screenshare to collect them and answer our questions. On phones until 6 PM ET (3 PM PT); will call again and email. |
 | Nov 13 | Checked Nov 11-13 opt-ins: still ~22% No Permissions Set; Subscribed-but-unlisted contacts are all account-created checkouts (findings 1 and 3). HPOS ruled out (findings 1, HPOS). Combined CSV of the 3,666 opted-in No Permissions Set customers (Drive only: sms-optedin-no-permissions-set-2026-11-10.csv). |
 | Nov 13 | Phone call + screenshare with John. CC doesn't know the cause yet. **CC will fix the "No Permissions Set" contacts for us** (we don't bulk-switch). John suggested putting the Subscribed customers who end up on no list onto a list that is NOT a WooCommerce list, so the nightly sync (which clears and refills only the WooCommerce lists) can't strip them. |
-| Nov 14 | Johnny emailed John the cause of the account-checkout problem (plugin nonce fails for the order save after WooCommerce logs the new account in; findings 2) and asked whether the sync reads the opt-in from the order only. John will see it Monday Nov 16. |
+| Nov 13 | Johnny emailed John the cause of the account-checkout problem (plugin nonce fails for the order save after WooCommerce logs the new account in; findings 2) and asked whether the sync reads the opt-in from the order only. Sent Friday evening PT, after John's hours (ET); he will see it Monday Nov 16. |
 
 ## Questions waiting on the developers
 1. Why don't opt-ins at checkout give these contacts permission? (Nov 13: cause still unknown to CC.)
-2. Does the sync read the opt-in from the customer's account (user meta), or only from the order? (Asked again Nov 14 with the cause.)
+2. Does the sync read the opt-in from the customer's account (user meta), or only from the order? (Asked again Nov 13 with the cause.)
 3. ~~Can CC fix permission for the opted-in customers?~~ Answered Nov 13: CC will fix them. Still to confirm: which contacts (only the opted-in ones in our files, not abandoned-cart contacts with no order or customers who said no) and when.
 4. Why do new opted-in customers end up on no list? (Nov 13: all 48 unlisted Subscribed contacts created an account at checkout.)
 5. Do bounce-report actions follow the current contact record?
