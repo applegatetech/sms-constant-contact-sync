@@ -1,6 +1,6 @@
 # Constant Contact case log
 
-Case: John Tran, Tier 2 Technical Support (support2@constantcontact.com, direct 781-482-5737, Mon-Fri 12-8 PM ET). Ref `ref:!00D7008xak.!500PW0245yjN:ref`. Earlier chat case with Manoj K (Nov 2).
+Case: John Tran, Tier 2 Technical Support (support2@constantcontact.com, direct 781-482-5737, Mon-Fri; works until about 6 PM ET = 3 PM PT, per his Nov 13 message; earlier note said 12-8 PM ET). Ref `ref:!00D7008xak.!500PW0245yjN:ref`. Earlier chat case with Manoj K (Nov 2).
 
 | Date | What happened |
 |---|---|
